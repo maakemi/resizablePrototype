@@ -1,0 +1,42 @@
+.resizableDiv {
+    background-color: white;
+    padding: 2px 0px;    
+    resize: auto;
+    overflow: hidden;
+    text-align: center;
+    align-self: center;
+    display: inline;
+    margin: auto;        
+    font-style: normal; 
+    font-variant: normal;
+    
+}
+
+#display{
+    width: 20px;  
+    font-size: 24px; 
+    font-family: Tahoma;
+    visibility: hidden;
+}
+
+#lbText{
+    visibility: hidden;
+}
+
+#testArea{
+   visibility: hidden;
+}
+
+#page{
+    background-color: lightgrey;
+    padding: 50;
+    align-items: center;
+    align-content: center;
+}
+
+
+
+
+
+
+
