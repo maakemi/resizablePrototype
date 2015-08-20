@@ -1,4 +1,9 @@
 
+
+/*
+Function that detects resize event on textArea
+source: http://jsfiddle.net/gbouthenot/D2bZd/
+*/
 var textareaResize = function(source, dest) {
     var resizeInt = null;
     
@@ -29,15 +34,25 @@ var textareaResize = function(source, dest) {
         resizeEvent();
     });
 };
-    
+
+
+/* Needed to detect resize event on textArea
+source: http://jsfiddle.net/gbouthenot/D2bZd/
+*/
 textareaResize($("#display"), $("#output"));
 
+/*  @What: Function that sets new font family for the text 
+    @When: event performs when changes option on the combobox
+*/
 
 $("#selectFont").change(function (){
     $("#display").css("font-family", $("#selectFont option:selected").text());
     setFontSize($("#txText").val(), "#display");
 });
 
+/*  @What: Function that performs "Set Text" button action for entering the <enter> key on textBox
+    @When: event needed to set a new word to the box   
+*/
 
 $('#txText').keypress(function (e) {
  var key = e.which;
@@ -48,11 +63,21 @@ $('#txText').keypress(function (e) {
 }); 
 
 
+/*  @What: Function that calculates the width of a given word and return it
+    @When: needs to get a word width
+    PS. Dont forget to set the same font style for span #testArea
+*/
+
 function getWordSize(word) {
     var span = document.getElementById("testArea");
     span.innerHTML = word;    
     return(span.offsetWidth)
 }
+
+
+/*  @What: Function that performs "Set Text" button action
+    @When: event needed to set a new word to the box    
+*/
 
 function btTextOnClick(){
     $("#display").text($("#txText").val());
@@ -60,6 +85,13 @@ function btTextOnClick(){
     $("#lbText").css("visibility", "visible");
     setFontSize($("#txText").val(), "#display");
 }
+
+/*  @What: Function that calculates text font size in order to fit the box size
+    @When: Function should be called everytime there is a change on the text, the box size, the font family, etc.    
+    word - the word/text to be displayed in the box
+    display - the box receiving the word/text   
+    
+*/
 
 function setFontSize(word, display){
    $("#testArea").css("font-family", $(display).css('font-family'));    
