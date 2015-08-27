@@ -20,17 +20,24 @@ var textareaResize = function(source, dest) {
     // clicking on the resize area, so the real-time effect
     // does not work under Chrome.
     source.on("mousedown", function(e) {
-        resizeInt = setInterval(resizeEvent, 1000/15);
+        console.log("DOWN");
+        resizeInt = setInterval(resizeEvent, 1000/5);
+    });
+    
+     source.on("onmousemove", function(e) {
+        console.log("MOVE");
+        resizeInt = setInterval(resizeEvent, 1000/5);
     });
 
     // The mouseup event stops the interval,
     // then call the resize event one last time.
     // We listen for the whole window because in some cases,
     // the mouse pointer may be on the outside of the textarea.
-    $(window).on("mouseup", function(e) {
+    $(window).on("mouseup", function(e) {        
         if (resizeInt !== null) {
             clearInterval(resizeInt);
         }
+        console.log("UP");
         resizeEvent();
     });
 };
@@ -68,7 +75,8 @@ $('#txText').keypress(function (e) {
     PS. Dont forget to set the same font style for span #testArea
 */
 
-function getWordSize(word) {
+function getWordSize(word, newFontSize) {
+    $("#testArea").css("font-size", newFontSize);
     var span = document.getElementById("testArea");
     span.innerHTML = word;    
     return(span.offsetWidth)
@@ -95,22 +103,23 @@ function btTextOnClick(){
 
 function setFontSize(word, display){
    $("#testArea").css("font-family", $(display).css('font-family'));    
-    var fontSize = $(display).css('font-size');
+    var fontSize =  parseInt($(display).css('font-size'));
     $("#testArea").css("font-size", fontSize);
     var displayWidth = parseInt($(display).css('width'));    
-    var wordWidth = getWordSize(word);
+    var wordWidth = getWordSize(word, fontSize);
     
-    if (getWordSize(word) > displayWidth)
-        while(getWordSize(word) > displayWidth-getWordSize("W"))
+    if (getWordSize(word, fontSize+1) > displayWidth)
+        while(getWordSize(word, fontSize) > displayWidth-getWordSize("W", fontSize))
         {
             fontSize = parseInt(fontSize) - 1;
-            $("#testArea").css("font-size", fontSize);
+           
         }
-    else if (getWordSize(word) < displayWidth)
-        while(getWordSize(word) < displayWidth-getWordSize("W"))
+    else if (getWordSize(word, fontSize) < displayWidth)
+        while(getWordSize(word, fontSize+1) < displayWidth-getWordSize("W", fontSize+1))
         {
             fontSize = parseInt(fontSize) + 1;
-            $("#testArea").css("font-size", fontSize);
+           
         }        
     $(display).css("font-size", fontSize);
+    console.log(fontSize);
 }

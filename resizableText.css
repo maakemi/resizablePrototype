@@ -1,7 +1,7 @@
 .resizableDiv {
     background-color: white;
     padding: 2px 0px;    
-    resize: auto;
+    resize: horizontal;
     overflow: hidden;
     text-align: center;
     align-self: center;
@@ -28,7 +28,7 @@
 }
 
 #page{
-    background-color: lightgrey;
+    background-color: white;
     padding: 50;
     align-items: center;
     align-content: center;
