@@ -1,4 +1,4 @@
-
+var textToBeDisplayed, oldWidth;
 
 /*
 Function that detects resize event on textArea
@@ -11,7 +11,7 @@ var textareaResize = function(source, dest) {
     var resizeEvent = function() {
         dest.outerWidth( source.outerWidth() );
         dest.outerHeight(source.outerHeight());
-        setFontSize($("#txText").val(), "#display");
+        setFontSize(textToBeDisplayed, "#display");
     };
 
     // This provides a "real-time" (actually 15 fps)
@@ -19,28 +19,37 @@ var textareaResize = function(source, dest) {
     // Unfortunately, mousedown is not fired on Chrome when
     // clicking on the resize area, so the real-time effect
     // does not work under Chrome.
-    source.on("mousedown", function(e) {
-        console.log("DOWN");
-        resizeInt = setInterval(resizeEvent, 1000/5);
+    source.on("mousedown", function(e) {       
+        resizeInt = setInterval(resizeEvent, 1000/30);
     });
     
-     source.on("onmousemove", function(e) {
-        console.log("MOVE");
-        resizeInt = setInterval(resizeEvent, 1000/5);
+     source.on("onmousemove", function(e) {       
+        resizeInt = setInterval(resizeEvent, 1000/30);
     });
 
     // The mouseup event stops the interval,
     // then call the resize event one last time.
     // We listen for the whole window because in some cases,
     // the mouse pointer may be on the outside of the textarea.
-    $(window).on("mouseup", function(e) {        
+    $(window).on("mouseup", function(e) {                
         if (resizeInt !== null) {
             clearInterval(resizeInt);
-        }
-        console.log("UP");
+        }        
         resizeEvent();
     });
+    $(window).on("mousemove", function(e) { 
+        if((textToBeDisplayed!=$('#txText').val()) && (oldWidth!=$('#display').width)){
+            resizeInt = setInterval(resizeEvent, 1000/30);
+            console.log("move");
+        }
+    });
 };
+
+
+
+function onChangeText(){
+    console.log("MUDOU");
+}
 
 
 /* Needed to detect resize event on textArea
@@ -54,7 +63,7 @@ textareaResize($("#display"), $("#output"));
 
 $("#selectFont").change(function (){
     $("#display").css("font-family", $("#selectFont option:selected").text());
-    setFontSize($("#txText").val(), "#display");
+    setFontSize(textToBeDisplayed, "#display");
 });
 
 /*  @What: Function that performs "Set Text" button action for entering the <enter> key on textBox
@@ -82,16 +91,31 @@ function getWordSize(word, newFontSize) {
     return(span.offsetWidth)
 }
 
+function btClearTextOnClick(){
+    
+    $('#txText').val("");
+    textToBeDisplayed = $('#txText').val();
+    $("#display").text(textToBeDisplayed);
+    $("#display").css("visibility", "hidden");
+    $("#lbText").css("visibility", "hidden");
+    $("#display").css("width", "20px");   
+
+}
+
 
 /*  @What: Function that performs "Set Text" button action
     @When: event needed to set a new word to the box    
 */
 
 function btTextOnClick(){
-    $("#display").text($("#txText").val());
-    $("#display").css("visibility", "visible");
-    $("#lbText").css("visibility", "visible");
-    setFontSize($("#txText").val(), "#display");
+    
+    if($('#txText').val()!=""){
+        textToBeDisplayed = $('#txText').val();
+        $("#display").text(textToBeDisplayed);
+        $("#display").css("visibility", "visible");
+        $("#lbText").css("visibility", "visible");
+        setFontSize(textToBeDisplayed, "#display");
+    }
 }
 
 /*  @What: Function that calculates text font size in order to fit the box size
@@ -120,6 +144,5 @@ function setFontSize(word, display){
             fontSize = parseInt(fontSize) + 1;
            
         }        
-    $(display).css("font-size", fontSize);
-    console.log(fontSize);
+    $(display).css("font-size", fontSize);    
 }
