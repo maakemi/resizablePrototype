@@ -1,19 +1,24 @@
-var textToBeDisplayed, oldWidth;
+var textToBeDisplayed, oldWidth, countTech = 3;
+var resizeInt = null;
 
 /*
 Function that detects resize event on textArea
 source: http://jsfiddle.net/gbouthenot/D2bZd/
 */
-var textareaResize = function(source, dest) {
-    var resizeInt = null;
+var textareaResize = function(source, dest1, dest2) {
+    
     
     // the handler function
     var resizeEvent = function() {
-        dest.outerWidth( source.outerWidth() );
-        dest.outerHeight(source.outerHeight());
-        setFontSize(textToBeDisplayed, "#display");
+        dest1.outerWidth( source.outerWidth() );       
+        dest2.outerWidth( source.outerWidth() );
+        console.log(source);
+       
+        recomputeText();
     };
-
+    if(resizeInt==null)
+   resizeInt = setInterval(resizeEvent, 1000/15);
+    
     // This provides a "real-time" (actually 15 fps)
     // event, while resizing.
     // Unfortunately, mousedown is not fired on Chrome when
@@ -30,40 +35,42 @@ var textareaResize = function(source, dest) {
     // The mouseup event stops the interval,
     // then call the resize event one last time.
     // We listen for the whole window because in some cases,
-    // the mouse pointer may be on the outside of the textarea.
-    $(window).on("mouseup", function(e) {                
+    // the mouse pointer may be on the outside  the textarea.
+   /* $(window).on("mouseup", function(e) {                
         if (resizeInt !== null) {
             clearInterval(resizeInt);
         }        
         resizeEvent();
     });
-    $(window).on("mousemove", function(e) { 
-        if((textToBeDisplayed!=$('#txText').val()) && (oldWidth!=$('#display').width)){
+    $(window).on("mousedown", function(e) { 
+        if((textToBeDisplayed!=$('#txText').val()) && (oldWidth!=$('#tech0').width)){
             resizeInt = setInterval(resizeEvent, 1000/30);
             console.log("move");
         }
-    });
+    });*/
 };
-
-
-
-function onChangeText(){
-    console.log("MUDOU");
-}
 
 
 /* Needed to detect resize event on textArea
 source: http://jsfiddle.net/gbouthenot/D2bZd/
 */
-textareaResize($("#display"), $("#output"));
+
+//Change this function when add more techniques
+
+//textareaResize($("#tech0"), $("#tech1"), $("#tech2"));
+ 
+
 
 /*  @What: Function that sets new font family for the text 
     @When: event performs when changes option on the combobox
 */
 
 $("#selectFont").change(function (){
-    $("#display").css("font-family", $("#selectFont option:selected").text());
-    setFontSize(textToBeDisplayed, "#display");
+    for(var i=0;i<countTech;i++){
+        var selector = "#tech"+i;
+        $(selector).css("font-family", $("#selectFont option:selected").text());
+    }
+    recomputeText();
 });
 
 /*  @What: Function that performs "Set Text" button action for entering the <enter> key on textBox
@@ -71,12 +78,31 @@ $("#selectFont").change(function (){
 */
 
 $('#txText').keypress(function (e) {
- var key = e.which;
- if(key == 13)  
-  {
-    btTextOnClick(); 
-  }
-}); 
+     var key = e.which;
+     if(key == 13)  
+      {
+        btTextOnClick(); 
+      }
+    }); 
+
+function onChangeMinFontSize(){
+    recomputeText();    
+}
+
+function onChangeWordAbbreviation(){           
+    setFontSize(textToBeDisplayed, "#display");
+    /*switch(+$("#selectAbbTechnique").val()) {
+    case 0:                
+        return dropVowels(word, wordpx, nodeWidth);
+        break;
+    case 1:                
+        return truncation(word, wordpx, nodeWidth);
+        break;
+    case 2:                
+        return truncationKeepEnd(word, wordpx, nodeWidth);
+        break;
+    } */          
+}
 
 
 /*  @What: Function that calculates the width of a given word and return it
@@ -93,12 +119,18 @@ function getWordSize(word, newFontSize) {
 
 function btClearTextOnClick(){
     
+    clearInterval(resizeInt);
+    resizeInt = null;
+    
     $('#txText').val("");
     textToBeDisplayed = $('#txText').val();
-    $("#display").text(textToBeDisplayed);
-    $("#display").css("visibility", "hidden");
     $("#lbText").css("visibility", "hidden");
-    $("#display").css("width", "20px");   
+    for(var i=0;i<countTech;i++){
+        var selector = "#tech"+i;
+        $(selector).text(textToBeDisplayed);
+        $(selector).css("visibility", "hidden");      
+        $(selector).css("width", "20px");   
+     }
 
 }
 
@@ -109,12 +141,17 @@ function btClearTextOnClick(){
 
 function btTextOnClick(){
     
+    textareaResize($("#tech0"), $("#tech1"), $("#tech2"));
+    
     if($('#txText').val()!=""){
         textToBeDisplayed = $('#txText').val();
-        $("#display").text(textToBeDisplayed);
-        $("#display").css("visibility", "visible");
-        $("#lbText").css("visibility", "visible");
-        setFontSize(textToBeDisplayed, "#display");
+        $("#lbText").css("visibility", "visible");            
+        for(var i=0;i<countTech;i++){
+            var selector = "#tech"+i;
+            $(selector).text(textToBeDisplayed);
+            $(selector).css("visibility", "visible");
+            recomputeText();
+        }
     }
 }
 
@@ -125,7 +162,7 @@ function btTextOnClick(){
     
 */
 
-function setFontSize(word, display){
+function setFontSize(word, display, minFontSize){
    $("#testArea").css("font-family", $(display).css('font-family'));    
     var fontSize =  parseInt($(display).css('font-size'));
     $("#testArea").css("font-size", fontSize);
@@ -145,4 +182,11 @@ function setFontSize(word, display){
            
         }        
     $(display).css("font-size", fontSize);    
+}
+
+function recomputeText(){
+    for(var i=0;i<countTech;i++){
+        var selector = "#tech"+i;
+        setFontSize(textToBeDisplayed, selector, $("#minFontSize").val());
+    }
 }

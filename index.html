@@ -6,16 +6,21 @@
     <div id="page"> 
         <label for="text">Enter your text: </label>   
         <input type="text" id="txText" default="Abbreviation"></input>   
-        <button type="button" id="btText" onclick="btTextOnClick()">Set Text</button>
-        <button type="button" id="btClearText" onclick="btClearTextOnClick()">Clear Text</button><br>         <br>
+        <button type="button" id="btText" class="buttons" onclick="btTextOnClick()">Set Text</button>
+        <button type="button" id="btClearText" class="buttons" onclick="btClearTextOnClick()">Clear Text</button><br>         
+        <br>        
+        <label>Minimum font size: <input type="number" id="minFontSize" min="1" max="99" value="10" onchange="onChangeMinFontSize()"></label><br>
+        <br>
         <label>Font family: &nbsp;&nbsp;&nbsp;&nbsp;    <select id="selectFont">
               <option value="0" name="Tahoma">Tahoma</option>
               <option value="1" name="Verdana">Verdana</option>                            
-        </select>  <br> </label>
+        </select>  <br> </label>               
         <br>
         <br>
-        <label for="text" id="lbText">Resize the box below in order to visualize the text</label>   <br> <br>
-        <textarea readonly id="display" rows="1" class="resizableDiv" onchange="onChangeText()">Set the text to be displayed here</textarea> <br>   
+        <label for="text" id="lbText">Resize the blue box below in order to visualize the text</label>   <br> <br>
+        <textarea readonly id="tech0" rows="1" class="resizableDiv">Set the text to be displayed here</textarea> <br> <br>  
+        <textarea readonly id="tech1" rows="1" class="resizableDiv">Set the text to be displayed here</textarea> <br> <br>
+        <textarea readonly id="tech2" rows="1" class="resizableDiv">Set the text to be displayed here</textarea> <br> <br>
        
        
     </div>
