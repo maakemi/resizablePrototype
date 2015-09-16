@@ -1,17 +1,18 @@
-var textToBeDisplayed, oldWidth, countTech = 3;
+var textToBeDisplayed, oldWidth, countTech = 4;
 var resizeInt = null;
 
 /*
 Function that detects resize event on textArea
 source: http://jsfiddle.net/gbouthenot/D2bZd/
 */
-var textareaResize = function(source, dest1, dest2) {
+var textareaResize = function(source, dest1, dest2, dest3) {
     
     
     // the handler function
     var resizeEvent = function() {
         dest1.outerWidth( source.outerWidth() );       
         dest2.outerWidth( source.outerWidth() );
+        dest3.outerWidth( source.outerWidth() );
         console.log(source);
        
         recomputeText();
@@ -141,7 +142,7 @@ function btClearTextOnClick(){
 
 function btTextOnClick(){
     
-    textareaResize($("#tech0"), $("#tech1"), $("#tech2"));
+    textareaResize($("#tech0"), $("#tech1"), $("#tech2"), $("#tech3"));
     
     if($('#txText').val()!=""){
         textToBeDisplayed = $('#txText').val();
@@ -180,13 +181,30 @@ function setFontSize(word, display, minFontSize){
         {
             fontSize = parseInt(fontSize) + 1;
            
-        }        
-    $(display).css("font-size", fontSize);    
+        } 
+    if(display=="#tech0"){
+        if(fontSize<1)
+            fontSize=1;
+        $(display).css("font-size", fontSize);    
+    }else
+        if(fontSize<minFontSize){
+            fontSize = minFontSize;
+            $(display).css("font-size", fontSize);
+            abbreviateWord(display, word);
+        }
+        else
+            $(display).css("font-size", fontSize);    
 }
 
 function recomputeText(){
-    for(var i=0;i<countTech;i++){
-        var selector = "#tech"+i;
+    setFontSize(textToBeDisplayed, "#tech0", -900);
+    for(var i=1;i<countTech;i++){
+        var selector = "#tech"+i;        
         setFontSize(textToBeDisplayed, selector, $("#minFontSize").val());
     }
 }
+
+function abbreviateWord(display, word){
+
+}
+

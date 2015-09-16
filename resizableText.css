@@ -31,6 +31,7 @@
     font-family: Arial;
 }
 
+
 .button{
     font-family: Arial;
 }
@@ -39,6 +40,38 @@
     border-color: blue;
 }
 
+#tech1,#tech2,#tech3{
+    resize:none;
+}
+
+.tooltip {
+    display: none;
+    padding: 10px;
+}
+
+.all:hover .tooltip {
+    background: blue;
+    border-radius: 3px;
+    bottom: -60px;
+    color: white;
+    display: inline;
+    height: 30px;
+    left: 0;
+    line-height: 30px;
+    position: absolute;
+}
+
+.all:hover .tooltip:before {
+    display: block;
+    content: "";
+    position: absolute;
+    top: -5px;
+    width: 0; 
+	height: 0; 
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;	
+	border-bottom: 5px solid blue;
+}
 
 
 
