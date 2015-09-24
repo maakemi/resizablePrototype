@@ -12,8 +12,7 @@ var textareaResize = function(source, dest1, dest2, dest3) {
     var resizeEvent = function() {
         dest1.outerWidth( source.outerWidth() );       
         dest2.outerWidth( source.outerWidth() );
-        dest3.outerWidth( source.outerWidth() );
-        console.log(source);
+        dest3.outerWidth( source.outerWidth() );        
        
         recomputeText();
     };
@@ -112,6 +111,7 @@ function onChangeWordAbbreviation(){
 */
 
 function getWordSize(word, newFontSize) {
+    $("#testArea").css("font-family", $("#selectFont option:selected").text());
     $("#testArea").css("font-size", newFontSize);
     var span = document.getElementById("testArea");
     span.innerHTML = word;    
@@ -186,14 +186,18 @@ function setFontSize(word, display, minFontSize){
         if(fontSize<1)
             fontSize=1;
         $(display).css("font-size", fontSize);    
-    }else
+    }else{
         if(fontSize<minFontSize){
             fontSize = minFontSize;
             $(display).css("font-size", fontSize);
-            abbreviateWord(display, word);
+            if(word!=undefined)
+                $(display).text(abbreviateWord(display, word));
         }
-        else
+        else{
             $(display).css("font-size", fontSize);    
+            $(display).text(word);
+        }
+    }
 }
 
 function recomputeText(){
@@ -205,6 +209,10 @@ function recomputeText(){
 }
 
 function abbreviateWord(display, word){
-
+    if(display=="#tech1"){
+       return dropVowels(word, getWordSize(word, $("#minFontSize").val()), parseInt($(display).css('width')));        
+    }else if (display=="#tech3"){
+        return truncationKeepEnd(word, getWordSize(word, $("#minFontSize").val()), parseInt($(display).css('width')));
+    }
 }
 
