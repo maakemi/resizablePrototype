@@ -3,10 +3,11 @@ MIN_WORD_LENGTH = 0;
 function dropVowels(word, wordSize, displayWidth) {          
     var index = word.length, 
         newWord, testWord;
-    while (wordSize>displayWidth && index>MIN_WORD_LENGTH){
+    while (wordSize>displayWidth-getWordSize("W") && index>MIN_WORD_LENGTH){
         index--;
         newWord = word.substring(index);
         newWord = newWord.replace(/[aeiou]/g,"");
+       // newWord = newWord.replace(/[aeiouAEIOU]/g,"");
         testWord = word.substring(0,index) + newWord;
         wordSize = getWordSize(testWord, $("#minFontSize").val());        
     }
